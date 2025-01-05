@@ -8,7 +8,7 @@
 flowchart TB
     Start([시작]) --> Init[초기 설정]
     Init --> Settings[/경로 설정/]
-    Settings -->|"1. Flutter 프로젝트 경로<br>2. Hash-maker 경로<br>3. Updater 경로"| CheckPaths{경로 확인}
+    Settings -->|"① Flutter 프로젝트 경로<br>② Hash-maker 경로<br>③ Updater 경로"| CheckPaths{경로 확인}
     
     CheckPaths -->|실패| Error1[경로 오류]
     Error1 --> End1([종료])
