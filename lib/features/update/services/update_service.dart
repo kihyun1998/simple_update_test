@@ -2,25 +2,42 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ffi/ffi.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:simple_update_test/core/config/models/app_config.dart';
 import 'package:simple_update_test/core/logging/logger.dart';
+import 'package:simple_update_test/core/version/version_info.dart';
 import 'package:simple_update_test/core/version/version_manager.dart';
-import 'package:simple_update_test/core/version/version_type.dart';
 import 'package:win32/win32.dart';
 
 class UpdateService {
   static final UpdateService _instance = UpdateService._internal();
   final Logger _logger = Logger();
   Version? _latestVersion;
-  final Version _currentVersion;
-
-  /// 여기서 버전 변경 가능
-  UpdateService._internal()
-      : _currentVersion = Version.fromType(VersionType.v10000240101);
-
+  late final Version _currentVersion;
   factory UpdateService() => _instance;
+  UpdateService._internal() {
+    _loadCurrentVersion();
+  }
+
+  Future<void> _loadCurrentVersion() async {
+    try {
+      final jsonString = await rootBundle.loadString('assets/version.json');
+      final json = jsonDecode(jsonString);
+      final versionInfo = VersionInfo.fromJson(json);
+      _currentVersion = Version.fromVersionInfo(versionInfo);
+      _logger.info('Loaded version: ${_currentVersion.formattedVersion}');
+    } catch (e, stackTrace) {
+      _logger.error(e, stackTrace);
+      // 폴백 버전 설정
+      _currentVersion = const Version(
+        s: "Test_V1.0.0(2024-01-01)",
+        c: Colors.blue,
+      );
+    }
+  }
 
   Version get currentVersion => _currentVersion;
   Version? get latestVersion => _latestVersion;

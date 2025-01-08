@@ -7,7 +7,6 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../core/config/repositories/config_repository.dart';
 import '../../core/logging/logger.dart';
-import '../../core/version/version_type.dart';
 
 class SetupManager {
   static final SetupManager _instance = SetupManager._internal();
@@ -53,9 +52,6 @@ class SetupManager {
   }
 
   Future<void> _handleVersionUpgrade(String fromVersion) async {
-    final versionType = VersionType.fromString(fromVersion);
-    Logger().info('Handling version upgrade from $fromVersion');
-
     // 기존 설정 불러오기
     final configRepo = ConfigRepository();
     final currentConfig = await configRepo.loadConfig();

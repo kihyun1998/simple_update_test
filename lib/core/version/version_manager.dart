@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'version_type.dart';
+import 'version_info.dart';
 
 class Version {
   final String s;
@@ -15,14 +15,14 @@ class Version {
   factory Version.parse(String versionString) {
     return Version(
       s: versionString,
-      c: Colors.blue, // 기본 색상 지정
+      c: Colors.blue,
     );
   }
 
-  factory Version.fromType(VersionType type) {
+  factory Version.fromVersionInfo(VersionInfo info) {
     return Version(
-      s: type.getVersion(),
-      c: type.getColor(),
+      s: info.versionString,
+      c: Colors.blue,
     );
   }
 
