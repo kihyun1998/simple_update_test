@@ -33,7 +33,7 @@ class UpdateService {
       _logger.error(e, stackTrace);
       // 폴백 버전 설정
       _currentVersion = const Version(
-        s: "Test_V1.0.0(2024-01-01)",
+        s: "Flutter_APP_V1.0.0(2024-01-01)",
         c: Colors.blue,
       );
     }

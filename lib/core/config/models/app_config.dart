@@ -17,7 +17,7 @@ class AppConfig {
 
     return AppConfig(
       title: json['title'] ?? 'Default Title',
-      ip: firstProfile['ip'] ?? 'localhost:8080',
+      ip: firstProfile['ip'] ?? 'http://localhost:8080',
       name: firstProfile['name'] ?? 'server',
       fromVersion: null,
     );

@@ -30,10 +30,12 @@ class Version {
   Color get color => c;
 
   static bool isUpdateAvailable(String currentVersion, String latestVersion) {
-    final currentMatch = RegExp(r'Test_V(\d+\.\d+\.\d+)\((\d{4}-\d{2}-\d{2})\)')
-        .firstMatch(currentVersion);
-    final latestMatch = RegExp(r'Test_V(\d+\.\d+\.\d+)\((\d{4}-\d{2}-\d{2})\)')
-        .firstMatch(latestVersion);
+    final currentMatch =
+        RegExp(r'Flutter_APP_V(\d+\.\d+\.\d+)\((\d{4}-\d{2}-\d{2})\)')
+            .firstMatch(currentVersion);
+    final latestMatch =
+        RegExp(r'Flutter_APP_V(\d+\.\d+\.\d+)\((\d{4}-\d{2}-\d{2})\)')
+            .firstMatch(latestVersion);
 
     if (currentMatch == null || latestMatch == null) {
       return false;
