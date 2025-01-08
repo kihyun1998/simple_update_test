@@ -8,7 +8,7 @@ REM hash-maker 경로 설정
 set "HASH_MAKER_PATH=C:\Users\User\go\src\hash-maker\hash-maker.exe"
 
 REM 추가할 파일 경로 설정
-set "UPDATER_PATH=C:\Users\User\go\src\fync-updater\updater.exe"
+set "UPDATER_PATH=C:\Users\User\go\src\dupdater\dupdater.exe"
 
 REM 사용자 지정 ZIP 파일 이름 (인자로 받음)
 set "CUSTOM_ZIP_NAME=%*"
