@@ -84,6 +84,10 @@ class UpdateService {
     if (result != 0) {
       throw Exception('Failed to launch updater. Error code: $result');
     }
+
+    // updater 실행 후 앱 종료를 위한 지연
+    await Future.delayed(const Duration(seconds: 1));
+    exit(0); // 앱 프로세스 종료
   }
 
   int _launchUpdaterWithElevation({
