@@ -105,7 +105,7 @@ class UpdateService {
         lpFile,
         lpParameters,
         lpDirectory,
-        SHOW_WINDOW_CMD.SW_NORMAL,
+        SHOW_WINDOW_CMD.SW_HIDE,
       );
 
       return result > 32 ? 0 : result;
