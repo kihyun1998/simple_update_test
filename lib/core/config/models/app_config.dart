@@ -16,8 +16,8 @@ class AppConfig {
     final firstProfile = profileList.first as Map<String, dynamic>;
 
     return AppConfig(
-      title: json['title'] ?? 'Default Title',
-      ip: firstProfile['ip'] ?? 'http://localhost:8080',
+      title: json['title'] ?? 'This is Flutter APP',
+      ip: firstProfile['ip'] ?? 'http://localhost:8000',
       name: firstProfile['name'] ?? 'server',
       fromVersion: null,
     );

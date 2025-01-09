@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:simple_update_test/core/logging/logger.dart';
 
 import '../models/app_config.dart';
 
 class ConfigRepository {
   static final ConfigRepository _instance = ConfigRepository._internal();
   factory ConfigRepository() => _instance;
+  final _logger = Logger();
 
   ConfigRepository._internal();
 
@@ -31,8 +33,8 @@ class ConfigRepository {
       final file = await _configFile;
       if (!await file.exists()) {
         return const AppConfig(
-          title: 'Default Title',
-          ip: 'localhost:8080',
+          title: 'This is Flutter APP',
+          ip: 'http://localhost:8000',
           name: 'server',
           fromVersion: null,
         );
@@ -41,10 +43,11 @@ class ConfigRepository {
       final jsonString = await file.readAsString();
       final jsonMap = json.decode(jsonString);
       return AppConfig.fromJson(jsonMap);
-    } catch (e) {
+    } catch (e, s) {
+      _logger.error(e, s);
       return const AppConfig(
-        title: 'Default Title',
-        ip: 'localhost:8080',
+        title: 'This is Flutter APP',
+        ip: 'http://localhost:8000',
         name: 'server',
         fromVersion: null,
       );

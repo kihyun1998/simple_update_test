@@ -67,7 +67,7 @@ class UpdateService {
   }
 
   Future<void> startUpdate() async {
-    final updaterPath = path.join(Directory.current.path, 'updater.exe');
+    final updaterPath = path.join(Directory.current.path, 'dupdater.exe');
 
     if (!await File(updaterPath).exists()) {
       throw Exception('Cannot find updater at: $updaterPath');
