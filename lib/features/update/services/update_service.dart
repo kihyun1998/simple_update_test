@@ -13,13 +13,19 @@ import 'package:simple_update_test/core/version/version_manager.dart';
 import 'package:win32/win32.dart';
 
 class UpdateService {
-  static final UpdateService _instance = UpdateService._internal();
-  final Logger _logger = Logger();
+  Version? _currentVersion; // nullable로 변경
   Version? _latestVersion;
-  late final Version _currentVersion;
+  final Logger _logger = Logger();
+
+  static final UpdateService _instance = UpdateService._internal();
+
   factory UpdateService() => _instance;
   UpdateService._internal() {
     _loadCurrentVersion();
+  }
+
+  Future<void> initialize() async {
+    await _loadCurrentVersion();
   }
 
   Future<void> _loadCurrentVersion() async {
@@ -28,7 +34,7 @@ class UpdateService {
       final json = jsonDecode(jsonString);
       final versionInfo = VersionInfo.fromJson(json);
       _currentVersion = Version.fromVersionInfo(versionInfo);
-      _logger.info('Loaded version: ${_currentVersion.formattedVersion}');
+      _logger.info('Loaded version: ${_currentVersion?.formattedVersion}');
     } catch (e, stackTrace) {
       _logger.error(e, stackTrace);
       // 폴백 버전 설정
@@ -39,7 +45,7 @@ class UpdateService {
     }
   }
 
-  Version get currentVersion => _currentVersion;
+  Version? get currentVersion => _currentVersion; // nullable로 변경
   Version? get latestVersion => _latestVersion;
 
   Future<bool> checkForUpdates(AppConfig config) async {
@@ -54,7 +60,7 @@ class UpdateService {
           final latestVersion = jsonResponse['filename'];
           _latestVersion = Version.parse(latestVersion);
           return Version.isUpdateAvailable(
-            _currentVersion.formattedVersion,
+            _currentVersion!.formattedVersion,
             _latestVersion!.formattedVersion,
           );
         }
@@ -74,7 +80,7 @@ class UpdateService {
     }
 
     _logger.info('Launching updater...');
-    final args = "-fromVersion ${_currentVersion.formattedVersion}";
+    final args = "-fromVersion ${_currentVersion!.formattedVersion}";
 
     final result = _launchUpdaterWithElevation(
       updaterPath: updaterPath,

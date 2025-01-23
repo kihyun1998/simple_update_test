@@ -1,20 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:simple_update_test/features/update/providers/update_service_notifier_provider.dart';
+import 'package:simple_update_test/features/update/services/provider/counter_provider.dart';
 
 import '../../../core/config/models/app_config.dart';
 import '../../../core/config/repositories/config_repository.dart';
 import '../services/update_service.dart';
 
-class UpdateCheckerScreen extends StatefulWidget {
+class UpdateCheckerScreen extends ConsumerStatefulWidget {
   const UpdateCheckerScreen({super.key});
 
   @override
-  _UpdateCheckerScreenState createState() => _UpdateCheckerScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _UpdateCheckerScreenState();
 }
 
-class _UpdateCheckerScreenState extends State<UpdateCheckerScreen> {
-  final UpdateService _updateService = UpdateService();
+class _UpdateCheckerScreenState extends ConsumerState<UpdateCheckerScreen> {
   String _updateStatus = 'Click to check for updates';
   late AppConfig _appConfig;
 
@@ -32,48 +35,85 @@ class _UpdateCheckerScreenState extends State<UpdateCheckerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _updateService.currentVersion.color,
-      appBar: AppBar(
-        backgroundColor: Colors.grey,
-        title: Text("${_appConfig.title} - ${_appConfig.name}"),
+    final count = ref.watch(counterProvider);
+    final updateServiceAsyncValue = ref.watch(updateServiceNotifierProvider);
+
+    return updateServiceAsyncValue.when(
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(_updateStatus),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                _appConfig.fromVersion != null
-                    ? "version: ${_appConfig.fromVersion} to ${_updateService.currentVersion.formattedVersion}"
-                    : "version: ${_updateService.currentVersion.formattedVersion}",
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _checkForUpdates,
-              child: const Text('Check for Updates'),
-            ),
-          ],
-        ),
+      error: (err, stack) => Scaffold(
+        body: Center(child: Text('Error: $err')),
       ),
+      data: (data) {
+        return Scaffold(
+          backgroundColor: data.currentVersion?.color,
+          appBar: AppBar(
+            backgroundColor: Colors.grey,
+            title: Text("${_appConfig.title} - ${_appConfig.name}"),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_updateStatus),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    _appConfig.fromVersion != null
+                        ? "version: ${_appConfig.fromVersion} to ${data.currentVersion?.formattedVersion}"
+                        : "version: ${data.currentVersion?.formattedVersion}",
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await _checkForUpdates(data);
+                  },
+                  child: const Text('Check for Updates'),
+                ),
+                const SizedBox(height: 20),
+                // 카운터 UI 추가
+                Text(
+                  '현재 카운트: $count',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () =>
+                          ref.read(counterProvider.notifier).decrement(),
+                      child: const Text('-'),
+                    ),
+                    const SizedBox(width: 20),
+                    ElevatedButton(
+                      onPressed: () =>
+                          ref.read(counterProvider.notifier).increment(),
+                      child: const Text('+'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
-  Future<void> _checkForUpdates() async {
+  Future<void> _checkForUpdates(UpdateService updateService) async {
     setState(() {
       _updateStatus = 'Checking for updates...';
     });
 
     try {
-      final updateAvailable = await _updateService.checkForUpdates(_appConfig);
+      final updateAvailable = await updateService.checkForUpdates(_appConfig);
 
       setState(() {
         if (updateAvailable) {
           _updateStatus =
-              'Update available: ${_updateService.latestVersion?.formattedVersion}';
-          _startUpdate();
+              'Update available: ${updateService.latestVersion?.formattedVersion}';
+          _startUpdate(updateService);
         } else {
           _updateStatus = 'You have the latest version';
         }
@@ -85,9 +125,9 @@ class _UpdateCheckerScreenState extends State<UpdateCheckerScreen> {
     }
   }
 
-  Future<void> _startUpdate() async {
+  Future<void> _startUpdate(UpdateService updateService) async {
     try {
-      await _updateService.startUpdate();
+      await updateService.startUpdate();
       await Future.delayed(const Duration(seconds: 1));
       exit(0);
     } catch (e) {

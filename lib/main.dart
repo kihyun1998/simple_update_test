@@ -1,5 +1,6 @@
 import 'package:args/args.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'features/setup/setup_manager.dart';
 import 'features/update/screens/update_checker_screen.dart';
@@ -15,7 +16,7 @@ void main(List<String> args) async {
   // 초기 설정
   await SetupManager().initialize(parser: parser, args: args);
 
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
