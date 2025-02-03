@@ -27,6 +27,12 @@ class Version {
   }
 
   String get formattedVersion => s;
+  String get updateVersion {
+    final match = RegExp(r'Flutter_APP_(V\d+\.\d+\.\d+\(\d{4}-\d{2}-\d{2}\))')
+        .firstMatch(s);
+    return match?.group(1) ?? s;
+  }
+
   Color get color => c;
 
   static bool isUpdateAvailable(String currentVersion, String latestVersion) {

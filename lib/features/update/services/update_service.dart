@@ -80,7 +80,7 @@ class UpdateService {
     }
 
     _logger.info('Launching updater...');
-    final args = "-fromVersion ${_currentVersion!.formattedVersion}";
+    final args = "-fromVersion ${_currentVersion!.updateVersion}";
 
     final result = _launchUpdaterWithElevation(
       updaterPath: updaterPath,
