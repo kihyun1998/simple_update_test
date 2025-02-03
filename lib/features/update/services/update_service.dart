@@ -80,13 +80,13 @@ class UpdateService {
     }
 
     _logger.info('Launching updater...');
-    final args = "-fromVersion ${_currentVersion!.updateVersion}";
+    final args =
+        "-fromVersion ${_currentVersion!.updateVersion} -toVersion ${_latestVersion!.updateVersion}";
 
     final result = _launchUpdaterWithElevation(
       updaterPath: updaterPath,
       args: args,
     );
-
     if (result != 0) {
       throw Exception('Failed to launch updater. Error code: $result');
     }
