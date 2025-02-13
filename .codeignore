@@ -18,3 +18,5 @@ build.bat
 analysis_options.yaml
 CODE.md
 pubspec.lock
+pubspec.yaml
+README.md
