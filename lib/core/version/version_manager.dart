@@ -3,38 +3,40 @@ import 'package:intl/intl.dart';
 
 import 'version_info.dart';
 
+// 버전 관리 클래스
 class Version {
-  final String s;
-  final Color c;
+  final String versionString;
+  final Color color;
 
   const Version({
-    required this.s,
-    required this.c,
+    required this.versionString,
+    required this.color,
   });
 
   factory Version.parse(String versionString) {
     return Version(
-      s: versionString,
-      c: Colors.blue,
+      versionString: versionString,
+      color: Colors.blue,
     );
   }
 
   factory Version.fromVersionInfo(VersionInfo info) {
     return Version(
-      s: info.versionString,
-      c: Colors.blue,
+      versionString: info.versionString,
+      color: Colors.blue,
     );
   }
 
-  String get formattedVersion => s;
+  String get formattedVersion => versionString;
+
+  // 업데이트 버전 문자열 추출
   String get updateVersion {
     final match = RegExp(r'Flutter_APP_(V\d+\.\d+\.\d+\(\d{4}-\d{2}-\d{2}\))')
-        .firstMatch(s);
-    return match?.group(1) ?? s;
+        .firstMatch(versionString);
+    return match?.group(1) ?? versionString;
   }
 
-  Color get color => c;
-
+  // 업데이트 가능 여부 확인
   static bool isUpdateAvailable(String currentVersion, String latestVersion) {
     final currentMatch =
         RegExp(r'Flutter_APP_V(\d+\.\d+\.\d+)\((\d{4}-\d{2}-\d{2})\)')
