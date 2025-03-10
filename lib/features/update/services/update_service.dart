@@ -81,7 +81,7 @@ class UpdateService {
 
     _logger.info('Launching updater...');
     final args =
-        "-fromVersion ${_currentVersion!.updateVersion} -toVersion ${_latestVersion!.updateVersion}";
+        "-fromVersion ${_currentVersion!.updateVersion} -toVersion ${_latestVersion!.updateVersion} -server server1 -pid $pid";
 
     final result = _launchUpdaterWithElevation(
       updaterPath: updaterPath,
