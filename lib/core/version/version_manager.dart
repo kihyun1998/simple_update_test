@@ -56,14 +56,14 @@ class Version {
     final currentChannelNumber = currentMatch.group(3) != null
         ? int.parse(currentMatch.group(3)!)
         : null;
-    final currentDate = DateFormat('yyyy-MM-dd').parse(currentMatch.group(2)!);
+    final currentDate = DateFormat('yyyy-MM-dd').parse(currentMatch.group(4)!);
 
     final latestVersionNumber = latestMatch.group(1)!;
     final latestIsStable = latestMatch.group(2) == null; // 안정 버전 여부
     final latestChannel = latestMatch.group(2); // d 또는 f 또는 null
     final latestChannelNumber =
         latestMatch.group(3) != null ? int.parse(latestMatch.group(3)!) : null;
-    final latestDate = DateFormat('yyyy-MM-dd').parse(latestMatch.group(2)!);
+    final latestDate = DateFormat('yyyy-MM-dd').parse(latestMatch.group(4)!);
 
     // 1. 안정 버전 vs 개발버전 (d/f) 비교 - 안정 버전이 항상 우선
     if (currentIsStable && !latestIsStable) {

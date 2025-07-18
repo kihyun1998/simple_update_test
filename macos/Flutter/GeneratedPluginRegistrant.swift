@@ -5,10 +5,10 @@
 import FlutterMacOS
 import Foundation
 
-import package_info_plus
+import flutter_alone
 import path_provider_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  FPPPackageInfoPlusPlugin.register(with: registry.registrar(forPlugin: "FPPPackageInfoPlusPlugin"))
+  FlutterAlonePlugin.register(with: registry.registrar(forPlugin: "FlutterAlonePlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
 }
